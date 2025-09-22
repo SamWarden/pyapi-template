@@ -1,7 +1,7 @@
 [project]
-name = "pyapp"
+name = "pyapi"
 version = "0.1.0"
-description = "Template for a Python app project"
+description = "PyAPI template for a Python API project"
 requires-python = ">=3.13"
 readme = "README.md"
 license = {file = "LICENSE.md"}
@@ -25,12 +25,12 @@ lint = [
 ]
 
 [project.scripts]
-pyapp = "pyapp.__main__:main"
+pyapi = "pyapi.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/SamWarden/pyapp-template"
-Repository = "https://github.com/SamWarden/pyapp-template"
-Issues = "https://github.com/SamWarden/pyapp-template/issues"
+Homepage = "https://github.com/SamWarden/pyapi"
+Repository = "https://github.com/SamWarden/pyapi"
+Issues = "https://github.com/SamWarden/pyapi/issues"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

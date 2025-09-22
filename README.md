@@ -1,13 +1,13 @@
-# Python APP Template
+# Python API Template
 
-Template for a Python app project
+Template for a Python API project
 
 ### Instllation
 
 Clone this template
 
 ```bash
-git clone git@github.com:SamWarden/pyapp.git appname
+git clone git@github.com:SamWarden/pyapi-template.git appname
 cd appname
 git remote rename origin template
 ```

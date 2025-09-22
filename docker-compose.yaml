@@ -1,20 +1,8 @@
 services:
-  pyapp:
-    image: pyapp
+  api:
+    image: pyapi:latest
     build: .
-    container_name: pyapp
+    container_name: pyapi-api
     restart: unless-stopped
-#     ports:
-#       - "8000:8000"
-#     volumes:
-#       - pyapp-data:/app/data
-#     networks:
-#       - pyapp-network
-
-# volumes:
-#   pyapp-data:
-#     name: pyapp-data
-
-# networks:
-#   pyapp-network:
-#     name: pyapp-network
+    ports:
+      - "8000:8000"

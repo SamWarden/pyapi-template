@@ -33,4 +33,4 @@ FROM python-base AS runner
 
 COPY --from=builder $VIRTUAL_ENV $VIRTUAL_ENV
 
-CMD ["pyapp"]
+CMD ["pyapi"]
