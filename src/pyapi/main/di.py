@@ -1,4 +1,4 @@
-from dishka import AsyncContainer, Provider, Scope, from_context, make_async_container, provide
+from dishka import AsyncContainer, Provider, Scope, from_context, make_async_container, provide, provide_all
 from dishka.integrations.fastapi import FastapiProvider
 from starlette.requests import Request
 
@@ -20,7 +20,7 @@ class ConfigProvider(Provider):
 
 
 class IdpProvider(Provider):
-    scope = Scope.ACTION
+    scope = Scope.REQUEST
 
     @provide
     def get_api_idp(self, request: Request, jwt_manager: JwtManager) -> ApiIdentityProvider:
@@ -41,8 +41,15 @@ class JwtManagerProvider(Provider):
         return JwtManagerImpl(public_key=config.public_key, algorithm=config.algorithm)
 
 
+class RequestHandlerProvider(Provider):
+    scope = Scope.REQUEST
+
+    provides = provide_all()
+
+
 def setup_di_container(context: dict[object, object]) -> AsyncContainer:
     container = make_async_container(
+        RequestHandlerProvider(),
         IdpProvider(),
         JwtManagerProvider(),
         ConfigProvider(),
