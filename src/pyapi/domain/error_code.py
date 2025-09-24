@@ -1,0 +1,6 @@
+from enum import Enum
+
+
+class ErrorCode(Enum):
+    INTERNAL_ERROR = "INTERNAL_ERROR"
+    INVALID_IDENTITY_ERROR = "INVALID_IDENTITY_ERROR"

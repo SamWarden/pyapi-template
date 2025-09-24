@@ -71,7 +71,7 @@ select = [
     "RUF",  # Ruff-specific rules
 ]
 ignore = [
-    "ANN401", # Disallow typing.Any usage
+#    "ANN401", # Disallow typing.Any usage
     "A003", # Python builtin is shadowed by class attribute {name} from {row}
     "B024", # An abstract base class, but it has no abstract methods
     "S101", # Use of `assert` detected
