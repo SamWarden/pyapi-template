@@ -1,7 +1,5 @@
 import logging
 
-from dishka.integrations.fastapi import setup_dishka
-
 from pyapi.config import Config, load_config
 from pyapi.infrastructure.log.main import setup_logging
 from pyapi.main.di import setup_di_container
@@ -15,10 +13,9 @@ def main() -> None:
     setup_logging()
     logger.info("Launching app...")
 
-    app = create_app()
     di_container = setup_di_container(context={Config: config})
-    setup_dishka(container=di_container, app=app)
 
+    app = create_app(di_container)
     run_app(app, config.api)
 
 
