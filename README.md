@@ -2,7 +2,7 @@
 
 Template for a Python API project
 
-### Instllation
+### Installation
 
 Clone this template
 
