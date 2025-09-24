@@ -9,6 +9,8 @@ from sqlalchemy import log as sa_log
 from structlog.processors import CallsiteParameter, CallsiteParameterAdder
 from structlog.typing import EventDict
 
+from pyapi.infrastructure.log.config import LogFormat, LoggingConfig
+
 ProcessorType = Callable[
     [
         structlog.types.WrappedLogger,
@@ -41,21 +43,30 @@ def serialize_to_json(data: EventDict, default: Callable[[object], object]) -> s
     return result
 
 
+class UnknownLogFormatError(ValueError):
+    def __init__(self, log_format: LogFormat) -> None:
+        self.log_format = log_format
+        super().__init__(f"Unknown log format value: {log_format}")
+
+
 def get_render_processor(
     *,
-    render_json_logs: bool = False,
+    log_format: LogFormat,
     serializer: Callable[[EventDict, Callable[[object], object]], str | bytes] = serialize_to_json,
     colors: bool = True,
 ) -> ProcessorType:
     processor: ProcessorType
-    if render_json_logs:
-        processor = structlog.processors.JSONRenderer(serializer=serializer)
-    else:
-        processor = structlog.dev.ConsoleRenderer(colors=colors)
+    match log_format:
+        case LogFormat.PLAIN:
+            processor = structlog.dev.ConsoleRenderer(colors=colors)
+        case LogFormat.JSON:
+            processor = structlog.processors.JSONRenderer(serializer=serializer)
+        case _:
+            raise UnknownLogFormatError(log_format)
     return processor
 
 
-def setup_logging() -> None:
+def setup_logging(config: LoggingConfig) -> None:
     # Mute SQLAlchemy default logger handler
     sa_log._add_default_handler = lambda logger: None  # noqa: SLF001
 
@@ -77,12 +88,12 @@ def setup_logging() -> None:
     logging_processors = (structlog.stdlib.ProcessorFormatter.remove_processors_meta,)
     logging_console_processors = (
         *logging_processors,
-        get_render_processor(render_json_logs=False, colors=True),
+        get_render_processor(log_format=config.format, colors=True),
     )
 
     handler = logging.StreamHandler()
     handler.set_name("default")
-    handler.setLevel("DEBUG")
+    handler.setLevel(config.level)
     console_formatter = structlog.stdlib.ProcessorFormatter(
         foreign_pre_chain=common_processors,
         processors=logging_console_processors,
@@ -91,4 +102,4 @@ def setup_logging() -> None:
 
     handlers: list[logging.Handler] = [handler]
 
-    logging.basicConfig(handlers=handlers, level="DEBUG")
+    logging.basicConfig(handlers=handlers, level=config.level)

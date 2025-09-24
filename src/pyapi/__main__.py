@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
     config = load_config()
-    setup_logging()
+    setup_logging(config.log)
     logger.info("Launching app...")
 
     di_container = setup_di_container(context={Config: config})
