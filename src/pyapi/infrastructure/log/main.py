@@ -84,6 +84,7 @@ def setup_logging(config: LoggingConfig) -> None:
                 CallsiteParameter.LINENO,
             ),
         ),
+        structlog.processors.EventRenamer("message"),
     )
     logging_processors = (structlog.stdlib.ProcessorFormatter.remove_processors_meta,)
     logging_console_processors = (
