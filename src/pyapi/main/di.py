@@ -1,10 +1,15 @@
+from collections.abc import AsyncGenerator
+
 from dishka import AsyncContainer, Provider, Scope, from_context, make_async_container, provide, provide_all
 from dishka.integrations.fastapi import FastapiProvider
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 from starlette.requests import Request
 
 from pyapi.config import Config
 from pyapi.infrastructure.identity_provider.api import ApiIdentityProvider
 from pyapi.infrastructure.jwt_manager import AuthJwtConfig, JwtManagerImpl
+from pyapi.infrastructure.postgres.config import PostgresConfig
+from pyapi.infrastructure.postgres.main import setup_sa_engine, setup_sa_session_factory
 from pyapi.interface.identity_provider import IdentityProvider
 from pyapi.interface.jwt_manager import JwtManager
 
@@ -17,6 +22,28 @@ class ConfigProvider(Provider):
     @provide
     def get_jwt_config(self, config: Config) -> AuthJwtConfig:
         return config.jwt
+
+    @provide
+    def get_postgres_config(self, config: Config) -> PostgresConfig:
+        return config.postgres
+
+
+class DbProvider(Provider):
+    scope = Scope.APP
+
+    @provide
+    async def get_engine(self, config: PostgresConfig) -> AsyncGenerator[AsyncEngine]:
+        async with setup_sa_engine(config) as engine:
+            yield engine
+
+    @provide
+    def get_session_factory(self, engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:
+        return setup_sa_session_factory(engine)
+
+    @provide(scope=Scope.ACTION)
+    async def get_session(self, session_factory: async_sessionmaker[AsyncSession]) -> AsyncGenerator[AsyncSession]:
+        async with session_factory() as session:
+            yield session
 
 
 class IdpProvider(Provider):

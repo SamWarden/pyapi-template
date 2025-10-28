@@ -19,7 +19,7 @@ repos:
     rev: v0.13.1
     hooks:
       - id: ruff-format
-      - id: ruff
+      - id: ruff-check
         args: [ --fix ]
   - repo: https://github.com/hadolint/hadolint
     rev: v2.14.0

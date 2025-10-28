@@ -6,5 +6,28 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
+    networks:
+      - pyapi-network
     env_file:
       - env/api.env
+
+  postgres:
+    image: postgres:18-alpine
+    container_name: pyapi-postgres
+    hostname: postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    networks:
+      - pyapi-network
+    volumes:
+      - pyapi-postgres-data:/var/lib/postgresql/data:rw
+    env_file: env/postgres.env
+
+volumes:
+  pyapi-postgres-data:
+    name: pyapi-postgres-data
+
+networks:
+  pyapi-network:
+    name: pyapi-network
