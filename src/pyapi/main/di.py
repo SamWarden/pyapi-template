@@ -80,6 +80,7 @@ def setup_di_container(context: dict[object, object]) -> AsyncContainer:
         IdpProvider(),
         JwtManagerProvider(),
         ConfigProvider(),
+        DbProvider(),
         FastapiProvider(),
         context=context,
     )
