@@ -14,6 +14,8 @@ maintainers = [
 ]
 
 dependencies = [
+    "alembic>=1.17.1",
+    "alembic-postgresql-enum>=1.8.0",
     "dishka>=1.7.1",
     "environs>=14.3.0",
     "fastapi>=0.117.1",
@@ -45,5 +47,5 @@ Issues = "https://github.com/SamWarden/pyapi/issues"
 testpaths = ["tests"]
 
 [build-system]
-requires = ["uv_build>=0.9.5,<0.10.0"]
-build-backend = "uv_build"
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
