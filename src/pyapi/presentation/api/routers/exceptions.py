@@ -43,7 +43,7 @@ def _default_get_data(err: object) -> dict[str, object]:
 
 
 @dataclass(slots=True, frozen=True)
-class ExceptionHandler[E]:
+class ExceptionHandler[E: Exception]:
     exception: type[E]
     http_code: int
     code: ErrorCode
@@ -56,7 +56,6 @@ class ExceptionHandler[E]:
             content={"error": error_data},
             status_code=self.http_code,
         )
-        exception_info: dict[str, E] = {"exc_info": err} if self.log_level == "ERROR" else {}
         logger.log(
             logging.getLevelName(self.log_level),
             "An error occurred: %r",
@@ -69,6 +68,6 @@ class ExceptionHandler[E]:
                 },
                 "status_code": error_response.status_code,
             },
-            **exception_info,  # type: ignore[arg-type]
+            exc_info=err,
         )
         return error_response
