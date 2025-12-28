@@ -4,8 +4,22 @@ services:
     build: .
     container_name: pyapi-api
     restart: unless-stopped
+    command:
+      - "sh"
+      - "-c"
+      - "uvicorn pyapi.main.api:create_app --factory --host $${API_HOST} --port $${API_PORT}"
     ports:
       - "8000:8000"
+    networks:
+      - pyapi-network
+    env_file:
+      - env/api.env
+
+  postgres_migration:
+    image: pyapi:latest
+    build: .
+    container_name: pyapi-postgres-migration
+    command: alembic upgrade head
     networks:
       - pyapi-network
     env_file:

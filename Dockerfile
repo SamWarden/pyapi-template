@@ -32,5 +32,4 @@ RUN uv sync --all-extras --no-editable
 FROM python-base AS runner
 
 COPY --from=builder $VIRTUAL_ENV $VIRTUAL_ENV
-
-CMD ["pyapi"]
+COPY ./alembic.ini $APP_PATH
