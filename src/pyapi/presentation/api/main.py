@@ -19,7 +19,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     await app.state.dishka_container.close()
 
 
-def create_app(di_container: dishka.AsyncContainer | dishka.Container) -> FastAPI:
+def create_api_app(di_container: dishka.AsyncContainer) -> FastAPI:
     app = FastAPI(
         title="PyAPI",
         version="1.0.0",
