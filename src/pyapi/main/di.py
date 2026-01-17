@@ -40,7 +40,7 @@ class DbProvider(Provider):
     def get_session_factory(self, engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:
         return setup_sa_session_factory(engine)
 
-    @provide(scope=Scope.ACTION)
+    @provide(scope=Scope.REQUEST)
     async def get_session(self, session_factory: async_sessionmaker[AsyncSession]) -> AsyncGenerator[AsyncSession]:
         async with session_factory() as session:
             yield session
