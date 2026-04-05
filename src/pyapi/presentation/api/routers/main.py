@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 
 from pyapi.presentation.api.routers.v1 import health
 
 
 def setup_api_routers(app: FastAPI) -> None:
-    app.include_router(health.router)
+    router = APIRouter(prefix="/api")
+    router.include_router(health.router)
+
+    app.include_router(router)

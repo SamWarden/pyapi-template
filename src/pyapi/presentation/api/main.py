@@ -25,7 +25,6 @@ def create_api_app(di_container: dishka.AsyncContainer) -> FastAPI:
         version="1.0.0",
         servers=[],
         lifespan=lifespan,
-        root_path="/api/v1",
         default_response_class=ORJSONResponse,
     )
 
