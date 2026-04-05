@@ -1,5 +1,6 @@
 import base64
 from dataclasses import dataclass
+from typing import cast
 
 import environs
 
@@ -22,7 +23,7 @@ def load_config() -> Config:
 
     return Config(
         log=LoggingConfig(
-            format=env.enum("LOG_FORMAT", enum=LogFormat, by_value=True),
+            format=cast(LogFormat, env.enum("LOG_FORMAT", enum=LogFormat, by_value=True)),
             level=env.str("LOG_LEVEL"),
         ),
         postgres=PostgresConfig(
