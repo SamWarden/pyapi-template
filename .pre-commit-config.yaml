@@ -9,24 +9,27 @@ repos:
       - id: detect-private-key
       - id: check-added-large-files
       - id: requirements-txt-fixer
-  - repo: local
-    hooks:
-      - id: mypy
-        name: mypy
-        entry: ./.venv/bin/mypy
-        language: system
-        pass_filenames: false
-        args:
-          - --follow-imports=silent
-          - src
-          - tests
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.9
-    hooks:
-      - id: ruff-format
-      - id: ruff-check
-        args: [ --fix ]
   - repo: https://github.com/hadolint/hadolint
     rev: v2.14.0
     hooks:
       - id: hadolint-docker
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format --force-exclude --exit-non-zero-on-format
+        require_serial: true
+        language: unsupported
+        types: [python]
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --force-exclude --fix --exit-non-zero-on-fix
+        require_serial: true
+        language: unsupported
+        types: [python]
+      - id: mypy
+        name: mypy
+        entry: uv run mypy --follow-imports=silent src tests
+        language: unsupported
+        require_serial: true
+        pass_filenames: false
