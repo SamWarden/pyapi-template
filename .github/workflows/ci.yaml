@@ -22,7 +22,7 @@ jobs:
           python-version: "3.14"
           enable-cache: true
       - name: Install dependencies
-        run: uv sync --group dev --group lint --all-extras
+        run: uv sync --all-extras --all-groups
       - name: Lint with pre-commit
         run: uv run prek run --all-files
   test:
@@ -36,7 +36,7 @@ jobs:
           python-version: "3.14"
           enable-cache: true
       - name: Install dependencies
-        run: uv sync --group test --all-extras
+        run: uv sync --all-extras --group test
       - name: Run tests with pytest
         run: uv run pytest
 #  build:
